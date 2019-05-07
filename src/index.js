@@ -10,7 +10,7 @@ function App() {
   return (
     <div className="container">
       <div className="jumbotron text-center mt-2">
-        <h3>Gallery Upload</h3>
+        <h3>Gallery Uploads</h3>
       </div>
       <GalleryUpload />
     </div>
