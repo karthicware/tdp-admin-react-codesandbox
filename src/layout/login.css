@@ -1,0 +1,26 @@
+.masthead {
+    background-color: #ffb800;
+    background-image: url(/assets/img/overlay.svg),linear-gradient(45deg,#ffb800 0%,#e6a600 100%);
+    background-size: cover;
+    z-index: 0;
+}
+.masthead h1 {
+    color: #fff;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.1;
+    z-index: 1;
+}
+.masthead h2 {
+    color: rgba(255,255,255,.6);
+    font-weight: 600;
+    z-index: 1;
+    font-size: 1.2rem;
+}
+.footerContainer {
+    margin-top: 30px;
+    background-color: #000;
+}
+.bodyContainer {
+    background-color: #f8f8f8;
+}
