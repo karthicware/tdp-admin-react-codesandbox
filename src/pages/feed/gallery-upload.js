@@ -46,7 +46,7 @@ export default class GalleryUpload extends React.Component {
     fire
       .database()
       .ref()
-      .update(updates, function (error) {
+      .update(updates, function(error) {
         if (error) {
           alert(error);
         } else {
@@ -125,16 +125,16 @@ export default class GalleryUpload extends React.Component {
   _handleSubmit(e) {
     //Sumbit handler
     e.preventDefault();
-    //this.saveImageInStorage();
-    sendPushNotificationToAll("New album added");
+    this.saveImageInStorage();
+    // sendPushNotificationToAll("New album added");
 
-    sendPushNotification(
-      "8754298377",
-      "LOVE YOU PONDATI",
-      "epdi love you sonnen parthaya"
-    ).catch(function (error) {
-      console.error(`_handleSubmit-error=${JSON.stringify(error)}`);
-    });
+    // sendPushNotification(
+    //   "8754298377",
+    //   "LOVE YOU PONDATI",
+    //   "epdi love you sonnen parthaya"
+    // ).catch(function(error) {
+    //   console.error(`_handleSubmit-error=${JSON.stringify(error)}`);
+    // });
   }
 
   _handleImageChange(e) {
@@ -156,13 +156,11 @@ export default class GalleryUpload extends React.Component {
 
   render() {
     return (
-      <div class="card">
-        <div class="card-header">
-        <h4 class="card-title">Gallery</h4>
-  </div>
-        <div class="card-body">
-
-
+      <div className="card">
+        <div className="card-header">
+          <h4 className="card-title">Gallery</h4>
+        </div>
+        <div className="card-body">
           <div className="col-12">
             <form onSubmit={this._handleSubmit}>
               <div className="form-group row">
@@ -174,7 +172,9 @@ export default class GalleryUpload extends React.Component {
                     type="text"
                     className="form-control"
                     value={this.state.albumTitle}
-                    onChange={e => this.setState({ albumTitle: e.target.value })}
+                    onChange={e =>
+                      this.setState({ albumTitle: e.target.value })
+                    }
                   />
                 </div>
               </div>
@@ -186,7 +186,9 @@ export default class GalleryUpload extends React.Component {
                       className="form-check-input"
                       type="checkbox"
                       onChange={e =>
-                        this.setState({ isNotificationRequire: e.target.checked })
+                        this.setState({
+                          isNotificationRequire: e.target.checked
+                        })
                       }
                       checked={this.state.isNotificationRequire}
                     />
@@ -207,17 +209,16 @@ export default class GalleryUpload extends React.Component {
                       multiple
                       accept="image/*"
                     />
-                    <label className="custom-file-label" for="customFile">
+                    <label className="custom-file-label" htmlFor="customFile">
                       {this.state.imagesPreviewUrls.length > 0
                         ? "No.of choosed files: " +
-                        this.state.imagesPreviewUrls.length
+                          this.state.imagesPreviewUrls.length
                         : "Choose files"}
                     </label>
                   </div>
                 </div>
               </div>
 
-              
               {this.state.imagesPreviewUrls.map(imagePreviewUrl => {
                 return (
                   <img
@@ -230,22 +231,22 @@ export default class GalleryUpload extends React.Component {
               })}
             </form>
           </div>
-          </div>
-          <div class="card-footer text-muted">
+        </div>
+        <div className="card-footer text-muted">
           <div className="row">
-                <div className="col-md-12">
-                  <button
-                    type="submit"
-                    className="btn btn-primary"
-                    onClick={this._handleSubmit}
-                  >
-                    <i className="fa fa-upload" />
-                    Upload
+            <div className="col-md-12">
+              <button
+                type="submit"
+                className="btn btn-primary"
+                onClick={this._handleSubmit}
+              >
+                <i className="fa fa-upload" />
+                Upload
               </button>
-                </div>
-              </div>
-  </div>
+            </div>
           </div>
+        </div>
+      </div>
     );
   }
 }
