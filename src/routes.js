@@ -6,13 +6,15 @@ import {
   BrowserRouter as Router
 } from "react-router-dom";
 
-import AdvertisementPage from "./pages/feed/advertisement-page";
-import GalleryPage from "./pages/gallery/gallery-route";
-import LoginPage from "./pages/login/login";
-import DashboardLayoutRoute from "./routes/dashboardlayout-route";
+//Layout
 import PaperbaseLayoutRoute from "./routes/paperbase-layout-route";
 import LoginLayoutRoute from "./routes/loginlayout-route";
-import CustomerMasterPage from "./pages/master/customer";
+//login page
+import LoginPage from "./pages/login/login";
+// private routes containing pages and tabs
+import AdsPage from "./pages/ads/ads-route";
+import GalleryPage from "./pages/gallery/gallery-route";
+import CustomerPage from "./pages/customer/customer-route";
 
 export default class AppRoutes extends React.Component {
   constructor() {
@@ -44,7 +46,7 @@ export default class AppRoutes extends React.Component {
         <Switch>
           <Route exact path="/">
             {this.state.isAuthenticated ? (
-              <Redirect to="/gallery/upload" />
+              <Redirect to="/gallery" />
             ) : (
               <Redirect to="/signin" />
             )}
@@ -59,14 +61,14 @@ export default class AppRoutes extends React.Component {
             component={GalleryPage}
             onLogout={this.handleLogout}
           />
-          <DashboardLayoutRoute
-            path="/feed/ad"
-            component={AdvertisementPage}
+          <PaperbaseLayoutRoute
+            path="/ads"
+            component={AdsPage}
             onLogout={this.handleLogout}
           />
-          <DashboardLayoutRoute
-            path="/masters/customer"
-            component={CustomerMasterPage}
+          <PaperbaseLayoutRoute
+            path="/customer"
+            component={CustomerPage}
             onLogout={this.handleLogout}
           />
           /> )}

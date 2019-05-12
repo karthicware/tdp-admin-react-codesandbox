@@ -2,9 +2,11 @@ import React from "react";
 import set from "lodash.set";
 import MaterialIcon, { colorPalette } from "material-icons-react";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import classNames from "classnames";
 import fire from "../../fire";
 
-export default class CustomerMasterPage extends React.Component {
+export default class CustomerEnroll extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,91 +40,79 @@ export default class CustomerMasterPage extends React.Component {
       <div className="card">
         <div className="card-header">
           <h4 className="card-title">Customer Info</h4>
+          {JSON.stringify(this.state.form)}
         </div>
         <div className="card-body">
           <div className="col-12">
             <form onSubmit={this.handleSubmit}>
               <div className="form-group row">
-                <div className="col-md-2">
-                  <label>Customer Name</label>
-                </div>
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
+                  <TextField
+                    label="Customer Name"
+                    margin="dense"
                     name="custName"
                     onChange={this.handleInputChange}
                   />
                 </div>
-                <div className="col-md-2">Company Name</div>
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
+                  <TextField
+                    label="Company Name"
+                    margin="dense"
                     name="compName"
                     onChange={this.handleInputChange}
                   />
                 </div>
-              </div>
-
-              <div className="form-group row">
-                <div className="col-md-2">Company Address1</div>
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
+                  <TextField
+                    label="Company Address1"
+                    margin="dense"
                     name="compAddress1"
                     onChange={this.handleInputChange}
                   />
                 </div>
-                <div className="col-md-2">Company Address2</div>
+              </div>
+
+              <div className="form-group row">
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
+                  <TextField
+                    label="Company Address2"
+                    margin="dense"
                     name="compAddress2"
                     onChange={this.handleInputChange}
                   />
                 </div>
-              </div>
-
-              <div className="form-group row">
-                <div className="col-md-2">Landline</div>
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
+                  <TextField
+                    label="Landline"
+                    margin="dense"
                     name="landline"
                     onChange={this.handleInputChange}
                   />
                 </div>
-                <div className="col-md-2">Mobile</div>
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="name"
+                  <TextField
+                    label="Mobile"
+                    margin="dense"
+                    name="mobile"
                     onChange={this.handleInputChange}
                   />
                 </div>
               </div>
 
               <div className="form-group row">
-                <div className="col-md-2">City</div>
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="landline"
+                  <TextField
+                    label="City"
+                    margin="dense"
+                    name="city"
                     onChange={this.handleInputChange}
                   />
                 </div>
-                <div className="col-md-2">State</div>
                 <div className="col-md-4">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="name"
+                  <TextField
+                    label="State"
+                    margin="dense"
+                    name="state"
                     onChange={this.handleInputChange}
                   />
                 </div>
@@ -133,19 +123,15 @@ export default class CustomerMasterPage extends React.Component {
         <div className="card-footer text-muted">
           <div className="row">
             <div className="col-md-12 mr-2">
-              <button className="btn btn-primary" onClick={this._handleSubmit}>
-                <MaterialIcon icon="check" color={"d50000"} />
-                Save
-              </button>
-              <button className="btn btn-danger" onClick={this.handleCancel}>
-                <i className="fa fa-close" />
-                Cancel
-              </button>
               <Button
                 variant="contained"
-                color="danger"
-                onClick={this.handleCancel}
+                color="primary"
+                className="mr-2"
+                onClick={this.handleSubmit}
               >
+                Submit
+              </Button>
+              <Button variant="contained" onClick={this.handleCancel}>
                 Cancel
               </Button>
             </div>
