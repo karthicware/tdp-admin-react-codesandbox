@@ -23,20 +23,24 @@ const categories = [
   {
     id: "Data Feed",
     children: [
-      { id: "Gallery", icon: <PeopleIcon />, active: true },
-      { id: "News", icon: <DnsRoundedIcon /> },
-      { id: "Advertisement", icon: <PermMediaOutlinedIcon /> },
-      { id: "Polls", icon: <PublicIcon /> },
-      { id: "Videos", icon: <SettingsEthernetIcon /> },
-      { id: "Announcement", icon: <SettingsInputComponentIcon /> }
+      { id: "Gallery", icon: <PeopleIcon />, active: true, route: "/gallery" },
+      { id: "News", icon: <DnsRoundedIcon />, route: "/news" },
+      { id: "Advertisement", icon: <PermMediaOutlinedIcon />, route: "/ads" },
+      { id: "Polls", icon: <PublicIcon />, route: "/polls" },
+      { id: "Videos", icon: <SettingsEthernetIcon />, route: "/videos" },
+      {
+        id: "Announcement",
+        icon: <SettingsInputComponentIcon />,
+        route: "/gallery"
+      }
     ]
   },
   {
     id: "Masters",
     children: [
-      { id: "Customer", icon: <SettingsIcon /> },
-      { id: "Settings", icon: <TimerIcon /> },
-      { id: "Dummy", icon: <PhonelinkSetupIcon /> }
+      { id: "Customer", icon: <SettingsIcon />, route: "/customer" },
+      { id: "Settings", icon: <TimerIcon />, route: "/settings" },
+      { id: "Dummy", icon: <PhonelinkSetupIcon />, route: "/gallery" }
     ]
   }
 ];
@@ -128,7 +132,7 @@ function SidebarNavigator(props) {
               <ListItem
                 button
                 dense
-                onClick={route}
+                onClick={() => props.history.push(route)}
                 key={childId}
                 className={classNames(
                   classes.item,
