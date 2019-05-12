@@ -1,12 +1,13 @@
 import React from "react";
-//import axios from "axios";
+import Button from "@material-ui/core/Button";
+
 import fire from "../../fire";
 import {
   sendPushNotificationToAll,
   sendPushNotification
 } from "../../services/notification-service";
 
-export default class GalleryUpload extends React.Component {
+class GalleryUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -235,14 +236,13 @@ export default class GalleryUpload extends React.Component {
         <div className="card-footer text-muted">
           <div className="row">
             <div className="col-md-12">
-              <button
-                type="submit"
-                className="btn btn-primary"
+              <Button
+                variant="contained"
+                color="primary"
                 onClick={this._handleSubmit}
               >
-                <i className="fa fa-upload" />
                 Upload
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -250,3 +250,5 @@ export default class GalleryUpload extends React.Component {
     );
   }
 }
+
+export default GalleryUpload;

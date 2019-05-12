@@ -7,9 +7,10 @@ import {
 } from "react-router-dom";
 
 import AdvertisementPage from "./pages/feed/advertisement-page";
-import GalleryPage from "./pages/feed/gallery-upload";
+import GalleryPage from "./pages/gallery/gallery-route";
 import LoginPage from "./pages/login/login";
 import DashboardLayoutRoute from "./routes/dashboardlayout-route";
+import PaperbaseLayoutRoute from "./routes/paperbase-layout-route";
 import LoginLayoutRoute from "./routes/loginlayout-route";
 import CustomerMasterPage from "./pages/master/customer";
 
@@ -43,7 +44,7 @@ export default class AppRoutes extends React.Component {
         <Switch>
           <Route exact path="/">
             {this.state.isAuthenticated ? (
-              <Redirect to="/feed/gallery" />
+              <Redirect to="/gallery/upload" />
             ) : (
               <Redirect to="/signin" />
             )}
@@ -53,8 +54,8 @@ export default class AppRoutes extends React.Component {
             component={LoginPage}
             onLogin={this.handleLogin}
           />
-          <DashboardLayoutRoute
-            path="/feed/gallery"
+          <PaperbaseLayoutRoute
+            path="/gallery"
             component={GalleryPage}
             onLogout={this.handleLogout}
           />

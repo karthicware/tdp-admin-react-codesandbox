@@ -11,6 +11,8 @@
     -->
 	<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 	<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+	<link rel="stylesheet" href="%PUBLIC_URL%/font.Roboto.css" />
+	
 	<!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -20,7 +22,32 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+  <style type="text/css">
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
 
+  src: url("%PUBLIC_URL%/roboto.woff2") format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+  </style>
 	<title>N2N IT Solutions</title>
 </head>
 

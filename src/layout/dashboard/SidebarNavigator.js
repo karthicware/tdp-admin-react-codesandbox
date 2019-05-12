@@ -36,7 +36,7 @@ const categories = [
     children: [
       { id: "Customer", icon: <SettingsIcon /> },
       { id: "Settings", icon: <TimerIcon /> },
-      { id: "Settings", icon: <PhonelinkSetupIcon /> }
+      { id: "Dummy", icon: <PhonelinkSetupIcon /> }
     ]
   }
 ];
@@ -86,7 +86,7 @@ const styles = theme => ({
   }
 });
 
-function Navigator(props) {
+function SidebarNavigator(props) {
   const { classes, ...other } = props;
 
   return (
@@ -155,8 +155,8 @@ function Navigator(props) {
   );
 }
 
-Navigator.propTypes = {
+SidebarNavigator.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Navigator);
+export default withStyles(styles)(SidebarNavigator);
