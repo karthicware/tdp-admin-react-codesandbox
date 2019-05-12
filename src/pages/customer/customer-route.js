@@ -4,16 +4,14 @@ import Paper from "@material-ui/core/Paper";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 
-import GalleryUpload from "./gallery-upload";
-import GalleryManage from "./gallery-manage";
+import CustomerEnroll from "./customer-enroll";
 import Paperbase from "../../layout/dashboard/Paperbase";
 
-const GalleryRoute = ({ match }) => {
+const CustomerRoute = ({ match }) => {
   //console.log(`match=${JSON.stringify(match)}`);
   return (
     <Paper>
-      <Route exact path={`${match.url}`} component={GalleryUpload} />
-      <Route path={`${match.url}/manage`} component={GalleryManage} />
+      <Route exact path={`${match.url}`} component={CustomerEnroll} />
     </Paper>
   );
 };
@@ -24,34 +22,26 @@ const HeaderTab = props => {
     <Tabs value={active} textColor="inherit">
       <Tab
         textColor="inherit"
-        label="Upload New"
+        label="Enroll"
         onClick={() => {
-          props.history.push("/gallery");
+          props.history.push("/customer");
           setActive(0);
-        }}
-      />
-      <Tab
-        textColor="inherit"
-        label="Manage Existing"
-        onClick={() => {
-          props.history.push("/gallery/manage");
-          setActive(1);
         }}
       />
     </Tabs>
   );
 };
 
-const GalleryPage = props => {
-  console.log(`GalleryPage props=${JSON.stringify(props)}`);
+const CustomerPage = props => {
+  //console.log(`props=${JSON.stringify(props)}`);
   return (
     <Paperbase
       headerTabs={<HeaderTab {...props} />}
-      content={<GalleryRoute {...props} />}
-      headerTitle="Gallery"
+      content={<CustomerRoute {...props} />}
+      headerTitle="Customer"
       {...props}
     />
   );
 };
 
-export default GalleryPage;
+export default CustomerPage;
