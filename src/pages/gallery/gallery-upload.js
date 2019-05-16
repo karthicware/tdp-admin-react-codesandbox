@@ -159,7 +159,7 @@ class GalleryUpload extends React.Component {
     return (
       <div className="card">
         <div className="card-header">
-          <h4 className="card-title">Gallery</h4>
+          <h4 className="card-title">Upload</h4>
         </div>
         <div className="card-body">
           <div className="col-12">

@@ -155,6 +155,7 @@ const styles = {
 class Paperbase extends React.Component {
   constructor(props) {
     super(props);
+    console.log(`props=${JSON.stringify(props.history)}`);
     this.state = {
       mobileOpen: false
     };
@@ -178,11 +179,13 @@ class Paperbase extends React.Component {
                 variant="temporary"
                 open={this.state.mobileOpen}
                 onClose={this.handleDrawerToggle}
+                {...this.props}
               />
             </Hidden>
             <Hidden xsDown implementation="css">
               <SidebarNavigator
                 PaperProps={{ style: { width: drawerWidth } }}
+                {...this.props}
               />
             </Hidden>
           </nav>
