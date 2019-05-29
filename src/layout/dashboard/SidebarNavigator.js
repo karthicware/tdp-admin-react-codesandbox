@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 import { withStyles } from "@material-ui/core/styles";
@@ -91,6 +91,7 @@ const styles = theme => ({
 });
 
 function SidebarNavigator(props) {
+  const [activeId, setActiveId] = useState("Gallery");
   const { classes, ...other } = props;
 
   return (
@@ -128,16 +129,21 @@ function SidebarNavigator(props) {
                 {id}
               </ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active, route }) => (
+            {children.map(({ id: childId, icon, route }) => (
               <ListItem
                 button
                 dense
-                onClick={() => props.history.push(route)}
+                onClick={() => {
+                  //alert(childId);
+                  setActiveId(childId);
+                  //alert(activeId);
+                  props.history.push(route);
+                }}
                 key={childId}
                 className={classNames(
                   classes.item,
                   classes.itemActionable,
-                  active && classes.itemActiveItem
+                  activeId === childId && classes.itemActiveItem
                 )}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
