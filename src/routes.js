@@ -15,6 +15,7 @@ import LoginPage from "./pages/login/login";
 import AdsPage from "./pages/ads/ads-route";
 import GalleryPage from "./pages/gallery/gallery-route";
 import CustomerPage from "./pages/customer/customer-route";
+import NewsPage from "./pages/news/news-route";
 
 export default class AppRoutes extends React.Component {
   constructor() {
@@ -69,6 +70,11 @@ export default class AppRoutes extends React.Component {
           <PaperbaseLayoutRoute
             path="/customer"
             component={CustomerPage}
+            onLogout={this.handleLogout}
+          />
+          <PaperbaseLayoutRoute
+            path="/news"
+            component={NewsPage}
             onLogout={this.handleLogout}
           />
           /> )}
