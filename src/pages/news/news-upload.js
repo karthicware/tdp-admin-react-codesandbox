@@ -329,3 +329,4 @@ class NewsUpload extends React.Component {
 }
 
 export default withStyles(styles)(NewsUpload);
+
