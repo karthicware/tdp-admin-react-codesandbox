@@ -8,6 +8,7 @@ import {
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Hidden from "@material-ui/core/Hidden";
 import SidebarNavigator from "./SidebarNavigator";
+import Paper from "@material-ui/core/Paper";
 //import Content from "./Content";
 import Header from "./Header";
 

@@ -6,13 +6,31 @@ import TextField from "@material-ui/core/TextField";
 import Snackbar from "@material-ui/core/Snackbar";
 import { PhotoCamera } from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+//import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
+import { withStyles } from "@material-ui/core/styles";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
 import fire, { db } from "../../fire";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
 import { convertThumbnail } from "../../utils/image-util";
 
-export default class NewsUpload extends React.Component {
+const styles = theme => ({
+  buttonRow: {
+    marginTop: 20
+  },
+  paper: {
+    padding: 20
+  },
+  imgContainer: {
+    display: "grid"
+  }
+});
+
+class NewsUpload extends React.Component {
   constructor(props) {
     super(props);
     //registeredOn: fire.firestore.FieldValue.serverTimestamp()
@@ -166,6 +184,7 @@ export default class NewsUpload extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     const {
       form,
       isSuccess,
@@ -242,81 +261,72 @@ export default class NewsUpload extends React.Component {
       <BlockUi tag="div" blocking={isSubmitting}>
         <ErrorToast />
         <SuccessToast />
-        <div className="card">
-          <div className="card-header">
-            <h4 className="card-title">News</h4>
-          </div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-6">
-                <form>
-                  <div className="form-group row">
-                    <div className="col-md-12">
-                      <TextField
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true
-                        }}
-                        name="title"
-                        label="News Title"
-                        value={form.title}
-                        onChange={this.handleInputChange}
-                      />
-                    </div>
-                  </div>
+        <Paper className={classes.paper}>
+          <Typography variant="h6" gutterBottom>
+            News
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item sm={6}>
+              <Grid item sm={12} xs={12}>
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  name="title"
+                  label="News Title"
+                  value={form.title}
+                  onChange={this.handleInputChange}
+                />
+              </Grid>
+              <Grid item sm={12} xs={12}>
+                <TextField
+                  fullWidth
+                  margin="normal"
+                  InputLabelProps={{
+                    shrink: true
+                  }}
+                  name="content"
+                  label="Content"
+                  value={form.content}
+                  onChange={this.handleInputChange}
+                  multiline
+                  rows="12"
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              item
+              sm={6}
+              xs={12}
+              justify="center"
+              alignItems="center"
+              className={classes.imgContainer}
+            >
+              {imagePreviewUrl ? ImagePreview : UploadImage}
+            </Grid>
+          </Grid>
 
-                  <div className="form-group row">
-                    <div className="col-md-12">
-                      <TextField
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                          shrink: true
-                        }}
-                        name="content"
-                        label="Content"
-                        value={form.content}
-                        onChange={this.handleInputChange}
-                        multiline
-                        rows="12"
-                      />
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div
-                className="col-6"
-                style={{
-                  alignItems: "center",
-                  display: "flex",
-                  justifyContent: "center"
-                }}
-              >
-                {imagePreviewUrl ? ImagePreview : UploadImage}
-              </div>
-            </div>
-          </div>
-          <div className="card-footer text-muted">
-            <div className="row">
-              <div className="col-md-12 mr-2">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className="mr-2"
-                  onClick={this.handleSubmit}
-                  disabled={isSubmitting}
-                >
-                  Submit
-                </Button>
-                <Button variant="contained" onClick={this.handleClear}>
-                  Clear
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+          <Grid item md={12} className={classes.buttonRow}>
+            <Button
+              variant="contained"
+              color="primary"
+              className="mr-2"
+              onClick={this.handleSubmit}
+              disabled={isSubmitting}
+            >
+              Submit
+            </Button>
+            <Button variant="contained" onClick={this.handleClear}>
+              Clear
+            </Button>
+          </Grid>
+        </Paper>
       </BlockUi>
     );
   }
 }
+
+export default withStyles(styles)(NewsUpload);
+
