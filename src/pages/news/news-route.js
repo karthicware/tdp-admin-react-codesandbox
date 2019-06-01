@@ -11,10 +11,10 @@ import Paperbase from "../../layout/dashboard/Paperbase";
 const NewsRoute = ({ match }) => {
   //console.log(`match=${JSON.stringify(match)}`);
   return (
-    <Paper>
+    <>
       <Route exact path={`${match.url}`} component={NewsUpload} />
       <Route path={`${match.url}/manage`} component={NewsManage} />
-    </Paper>
+    </>
   );
 };
 
