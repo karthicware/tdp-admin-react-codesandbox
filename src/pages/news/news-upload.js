@@ -1,6 +1,5 @@
 import React from "react";
 import set from "lodash.set";
-import MaterialIcon, { colorPalette } from "material-icons-react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -9,12 +8,11 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-//import { makeStyles } from "@material-ui/core/styles";
-import { makeStyles } from "@material-ui/styles";
 import { withStyles } from "@material-ui/core/styles";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
-import fire, { db } from "../../fire";
+
+import fire from "../../fire";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
 import { convertThumbnail } from "../../utils/image-util";
 
@@ -50,8 +48,6 @@ class NewsUpload extends React.Component {
     this.handleClear = this.handleClear.bind(this);
     this._handleImageChange = this._handleImageChange.bind(this);
   }
-
-  componentDidMount() {}
 
   handleClear() {
     this.setState((state, props) => {
@@ -261,11 +257,11 @@ class NewsUpload extends React.Component {
       <BlockUi tag="div" blocking={isSubmitting}>
         <ErrorToast />
         <SuccessToast />
+        <Typography variant="h6" gutterBottom>
+          Add/Edit News
+        </Typography>
         <Paper className={classes.paper}>
-          <Typography variant="h6" gutterBottom>
-            News
-          </Typography>
-          <Grid container spacing={3}>
+          <Grid container>
             <Grid item sm={6}>
               <Grid item sm={12} xs={12}>
                 <TextField
@@ -329,4 +325,3 @@ class NewsUpload extends React.Component {
 }
 
 export default withStyles(styles)(NewsUpload);
-

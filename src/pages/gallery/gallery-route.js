@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Route } from "react-router-dom";
-import Paper from "@material-ui/core/Paper";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 
@@ -11,10 +10,10 @@ import Paperbase from "../../layout/dashboard/Paperbase";
 const GalleryRoute = ({ match }) => {
   //console.log(`match=${JSON.stringify(match)}`);
   return (
-    <Paper>
+    <>
       <Route exact path={`${match.url}`} component={GalleryUpload} />
       <Route path={`${match.url}/manage`} component={GalleryManage} />
-    </Paper>
+    </>
   );
 };
 

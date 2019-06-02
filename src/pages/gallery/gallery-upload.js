@@ -1,16 +1,87 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Snackbar from "@material-ui/core/Snackbar";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import BlockUi from "react-block-ui";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
+import "react-block-ui/style.css";
 
 import fire from "../../fire";
+import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
 import {
   sendPushNotificationToAll,
   sendPushNotification
 } from "../../services/notification-service";
 
+const styles = theme => ({
+  grid: {
+    //width: "30%"
+  },
+  imgContainer: {
+    display: "grid"
+  },
+  paper: {
+    padding: 20,
+    marginBottom: 20
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
+  fileInput: {
+    display: "none"
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit
+  },
+  footer: {
+    marginTop: 20
+  },
+  gridContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden"
+    //backgroundColor: theme.palette.background.paper
+  },
+  gridList: {
+    //width: 500,
+    height: 450
+  },
+  formGrid: {
+    //paddingRight: theme.spacing.unit
+    width: "50%"
+  },
+  submitButton: {
+    marginTop: 20
+  },
+  deleteIcon: {
+    color: "rgba(255, 255, 255, 0.54)",
+    fontSize: 42
+  },
+  imgTitleBar: {
+    background: "none"
+  }
+});
+
 class GalleryUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isSuccess: false,
+      isFailure: false,
+      message: null,
+      isSubmitting: false,
       files: [],
       imagesPreviewUrls: [],
       albumTitle: "",
@@ -24,8 +95,18 @@ class GalleryUpload extends React.Component {
       this
     );
     this.saveImageInStorage = this.saveImageInStorage.bind(this);
+    this.removeImage = this.removeImage.bind(this);
   }
 
+  removeImage(i) {
+    //console.log(`i=${i}`);
+    let { imagesPreviewUrls } = this.state;
+    imagesPreviewUrls.splice(i, 1);
+    console.log(`imagesPreviewUrls=${imagesPreviewUrls.length}`);
+    this.setState((state, props) => {
+      return { imagesPreviewUrls };
+    });
+  }
   saveImageDetailsInDB(remoteFile) {
     //const _this = this;
     const { albumTitle } = this.state;
@@ -124,8 +205,11 @@ class GalleryUpload extends React.Component {
   }
 
   _handleSubmit(e) {
-    //Sumbit handler
-    e.preventDefault();
+    this.setState((state, props) => {
+      return {
+        isSubmitting: true
+      };
+    });
     this.saveImageInStorage();
     // sendPushNotificationToAll("New album added");
 
@@ -156,99 +240,149 @@ class GalleryUpload extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
+    const {
+      isSuccess,
+      isFailure,
+      message,
+      isSubmitting,
+      imagesPreviewUrls
+    } = this.state;
+    const ErrorToast = () => (
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        open={isFailure}
+        autoHideDuration={2000}
+        onClose={this.handleClose}
+      >
+        <MySnackbarContentWrapper
+          onClose={this.handleCloseForFailure}
+          variant="success"
+          message={message}
+        />
+      </Snackbar>
+    );
+    const SuccessToast = () => (
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right"
+        }}
+        open={isSuccess}
+        autoHideDuration={2000}
+        onClose={this.handleClose}
+      >
+        <MySnackbarContentWrapper
+          onClose={this.handleCloseForSuccess}
+          variant="success"
+          message={message}
+        />
+      </Snackbar>
+    );
     return (
-      <div className="card">
-        <div className="card-header">
-          <h4 className="card-title">Upload</h4>
-        </div>
-        <div className="card-body">
-          <div className="col-12">
-            <form onSubmit={this._handleSubmit}>
-              <div className="form-group row">
-                <div className="col-sm-3">
-                  <label>Album Title</label>
-                </div>
-                <div className="col-sm-9">
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={this.state.albumTitle}
-                    onChange={e =>
-                      this.setState({ albumTitle: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-              <div className="form-group row">
-                <div className="col-sm-3">Push Notification (Y/N)</div>
-                <div className="col-sm-9">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      onChange={e =>
-                        this.setState({
-                          isNotificationRequire: e.target.checked
-                        })
-                      }
-                      checked={this.state.isNotificationRequire}
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="form-group row">
-                <div className="col-sm-3">
-                  <label>Choose Files</label>
-                </div>
-                <div className="col-sm-9">
-                  <div className="custom-file">
-                    <input
-                      type="file"
-                      className="custom-file-input"
-                      id="customFile"
-                      onChange={this._handleImageChange}
-                      multiple
-                      accept="image/*"
-                    />
-                    <label className="custom-file-label" htmlFor="customFile">
-                      {this.state.imagesPreviewUrls.length > 0
-                        ? "No.of choosed files: " +
-                          this.state.imagesPreviewUrls.length
-                        : "Choose files"}
-                    </label>
-                  </div>
-                </div>
-              </div>
+      <BlockUi tag="div" blocking={isSubmitting}>
+        <ErrorToast />
+        <SuccessToast />
+        <Typography variant="h6" gutterBottom>
+          Add/Edit Gallery
+        </Typography>
+        <Paper className={classes.paper}>
+          <Grid
+            container
+            className={classes.formGrid}
+            justify="space-between"
+            alignItems="center"
+          >
+            <TextField
+              margin="normal"
+              InputLabelProps={{
+                shrink: true
+              }}
+              name="title"
+              label="Album Title"
+              value={this.state.title}
+              onChange={e => this.setState({ albumTitle: e.target.value })}
+            />
 
-              {this.state.imagesPreviewUrls.map(imagePreviewUrl => {
-                return (
-                  <img
-                    key={imagePreviewUrl}
-                    alt="previewImg"
-                    src={imagePreviewUrl}
-                    style={{ width: "100px", height: "100px" }}
-                  />
-                );
-              })}
-            </form>
-          </div>
-        </div>
-        <div className="card-footer text-muted">
-          <div className="row">
-            <div className="col-md-12">
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={this.state.isNotificationRequire}
+                  color="primary"
+                  onChange={e =>
+                    this.setState({
+                      isNotificationRequire: e.target.checked
+                    })
+                  }
+                />
+              }
+              label="Push Notification"
+            />
+            <input
+              accept="image/*"
+              className={classes.fileInput}
+              id="outlined-button-file"
+              onChange={this._handleImageChange}
+              multiple
+              type="file"
+            />
+            <label htmlFor="outlined-button-file">
               <Button
                 variant="contained"
-                color="primary"
-                onClick={this._handleSubmit}
+                component="span"
+                className={classes.button}
               >
                 Upload
+                <CloudUploadIcon className={classes.rightIcon} />
               </Button>
-            </div>
+            </label>
+          </Grid>
+          <Grid item className={classes.submitButton}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this._handleSubmit}
+            >
+              Submit
+            </Button>
+          </Grid>
+        </Paper>
+
+        <Grid item sm={12} xs={12}>
+          <div className={classes.gridContainer}>
+            <GridList
+              cellHeight={160}
+              className={imagesPreviewUrls.length ? classes.gridList : null}
+              cols={3}
+            >
+              {imagesPreviewUrls.map((imagePreviewUrl, i) => (
+                <GridListTile key={imagePreviewUrl} cols={1}>
+                  <img src={imagePreviewUrl} alt={"No Img"} />
+
+                  <GridListTileBar
+                    classes={{
+                      root: classes.imgTitleBar
+                    }}
+                    actionIcon={
+                      <IconButton
+                        className={classes.deleteIcon}
+                        onClick={() => this.removeImage(i)}
+                      >
+                        <DeleteForeverRoundedIcon color="error" />
+                      </IconButton>
+                    }
+                  />
+                </GridListTile>
+              ))}
+            </GridList>
           </div>
-        </div>
-      </div>
+        </Grid>
+      </BlockUi>
     );
   }
 }
 
-export default GalleryUpload;
+export default withStyles(styles)(GalleryUpload);
