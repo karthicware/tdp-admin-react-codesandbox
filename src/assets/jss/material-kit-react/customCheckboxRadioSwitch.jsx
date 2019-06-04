@@ -3,7 +3,7 @@ import {
   dangerColor,
   roseColor,
   grayColor
-} from "assets/jss/material-kit-react.jsx";
+} from "../material-kit-react.jsx";
 
 const customCheckboxRadioSwitch = {
   checkRoot: {
@@ -149,7 +149,7 @@ const customCheckboxRadioSwitch = {
     transform: "translateX(-4px)!important"
   },
   switchIconChecked: {
-    borderColor: "#9c27b0",
+    borderColor: primaryColor,
     transform: "translateX(0px)!important"
   },
   switchBar: {
@@ -161,7 +161,7 @@ const customCheckboxRadioSwitch = {
   },
   switchChecked: {
     "& + $switchBar": {
-      backgroundColor: "rgba(156, 39, 176, 1) !important"
+      backgroundColor: "rgba(0, 155, 229, 1) !important"
     }
   }
 };

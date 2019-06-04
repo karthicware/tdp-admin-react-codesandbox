@@ -1,5 +1,7 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Button from "../../components/CustomButtons/Button.jsx";
+import customStyles from "../../assets/jss/material-kit-react/customCheckboxRadioSwitch.jsx";
+//import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Snackbar from "@material-ui/core/Snackbar";
 import Typography from "@material-ui/core/Typography";
@@ -17,6 +19,7 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
 import "react-block-ui/style.css";
 
+//import MyButton from "../../components/CustomButtons/Button.jsx";
 import fire from "../../fire";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
 import {
@@ -25,6 +28,7 @@ import {
 } from "../../services/notification-service";
 
 const styles = theme => ({
+  ...customStyles,
   grid: {
     //width: "30%"
   },
@@ -286,6 +290,7 @@ class GalleryUpload extends React.Component {
       <BlockUi tag="div" blocking={isSubmitting}>
         <ErrorToast />
         <SuccessToast />
+
         <Typography variant="h6" gutterBottom>
           Add/Edit Gallery
         </Typography>
@@ -312,6 +317,13 @@ class GalleryUpload extends React.Component {
                 <Switch
                   checked={this.state.isNotificationRequire}
                   color="primary"
+                  classes={{
+                    switchBase: classes.switchBase,
+                    checked: classes.switchChecked,
+                    icon: classes.switchIcon,
+                    iconChecked: classes.switchIconChecked,
+                    bar: classes.switchBar
+                  }}
                   onChange={e =>
                     this.setState({
                       isNotificationRequire: e.target.checked
