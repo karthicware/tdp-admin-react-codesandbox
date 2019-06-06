@@ -26,6 +26,7 @@ import {
   sendPushNotificationToAll,
   sendPushNotification
 } from "../../services/notification-service";
+import { convertThumbnail } from "../../utils/image-util";
 
 const styles = theme => ({
   ...customStyles,
@@ -89,17 +90,24 @@ class GalleryUpload extends React.Component {
       files: [],
       imagesPreviewUrls: [],
       albumTitle: "",
-      remoteFiles: [],
-      isNotificationRequire: true
+      isNotificationRequire: false
+    };
+    this.errorCallback = error => {
+      this.setState((state, props) => {
+        return {
+          message: error,
+          isFailure: true,
+          isSubmitting: false
+        };
+      });
     };
     this._handleImageChange = this._handleImageChange.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
-    this.saveImageDetailsInDB = this.saveImageDetailsInDB.bind(this);
-    this.convertThumbnailAndSaveInStorage = this.convertThumbnailAndSaveInStorage.bind(
-      this
-    );
-    this.saveImageInStorage = this.saveImageInStorage.bind(this);
+    this.savePhoto = this.savePhoto.bind(this);
+    this.updatePhotoCount = this.updatePhotoCount.bind(this);
+    this.storeAllImage = this.storeAllImage.bind(this);
     this.removeImage = this.removeImage.bind(this);
+    this.saveAlbumMetadata = this.saveAlbumMetadata.bind(this);
   }
 
   removeImage(i) {
@@ -111,98 +119,68 @@ class GalleryUpload extends React.Component {
       return { imagesPreviewUrls };
     });
   }
-  saveImageDetailsInDB(remoteFile) {
-    //const _this = this;
-    const { albumTitle } = this.state;
-    const newPostKey = fire
-      .database()
-      .ref()
-      .child(`gallery/album/${albumTitle}`)
-      .push().key;
 
-    var updates = {};
-    updates[`/gallery/album/${albumTitle}/${newPostKey}`] =
-      remoteFile.remoteUrl;
-    updates[`/gallery/metadata/${albumTitle}/${newPostKey}`] = {
-      thumbnail: remoteFile.thumbnailUrl,
-      title: albumTitle
-    };
-    sendPushNotificationToAll("New album added");
+  savePhoto(key, obj) {
+    //sendPushNotificationToAll("New album added");
 
     fire
       .database()
-      .ref()
-      .update(updates, function(error) {
+      .ref(`/gallery/album/${key}`)
+      .set(obj, function(error) {
         if (error) {
           alert(error);
         } else {
-          alert("Data saved successfully!");
+          this.errorCallback();
         }
       });
   }
 
-  convertThumbnailAndSaveInStorage(remoteUrl, inputFile) {
-    const _this = this;
-    const { albumTitle, remoteFiles } = this.state;
-    let remoteFile = { remoteUrl, fileName: inputFile.name };
-
-    const fileName = inputFile.name;
-    const reader = new FileReader();
-    reader.readAsDataURL(inputFile);
-    reader.onload = event => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const elem = document.createElement("canvas");
-        const width = 200;
-        const scaleFactor = width / img.width;
-        elem.width = width;
-        elem.height = img.height * scaleFactor;
-        const ctx = elem.getContext("2d");
-        // img.width and img.height will contain the original dimensions
-        ctx.drawImage(img, 0, 0, width, img.height * scaleFactor);
-        ctx.canvas.toBlob(
-          blob => {
-            const file = new File([blob], fileName, {
-              type: "image/png",
-              lastModified: Date.now()
-            });
-            const thumbnailFileRef = fire
-              .storage()
-              .ref(`gallery/${albumTitle}/thumbnail`)
-              .child(file.name);
-            thumbnailFileRef.put(file).then(snapshot =>
-              thumbnailFileRef.getDownloadURL().then(url => {
-                remoteFile.thumbnailUrl = url;
-                remoteFiles.push(remoteFile);
-                _this.saveImageDetailsInDB(remoteFile);
-                _this.setState({ remoteFiles });
-              })
-            );
-          },
-          "image/jpeg",
-          1
-        );
+  updatePhotoCount(key) {
+    fire
+      .database()
+      .ref(`/gallery/metadata/${key}`)
+      .transaction(function(post) {
+        if (post) {
+          post["count"] = post["count"] + 1;
+        }
+        return post;
+      });
+    this.setState((state, props) => {
+      return {
+        message: "Album uploaded successfully",
+        isSuccess: true,
+        isSubmitting: false,
+        files: [],
+        imagesPreviewUrls: [],
+        albumTitle: ""
       };
-      reader.onerror = error => {
-        console.log(error);
-        remoteFiles.push(remoteFile);
-        _this.saveImageDetailsInDB(remoteFile);
-        _this.setState({ remoteFiles });
-      };
-    };
+    });
   }
 
-  saveImageInStorage() {
+  storeAllImage(key) {
     const _this = this;
-    const { albumTitle, files } = this.state;
-    files.forEach(file => {
-      const storageRef = fire.storage().ref(`gallery/${albumTitle}`);
-      const mainImage = storageRef.child(file.name);
-      mainImage.put(file).then(snapshot =>
-        mainImage.getDownloadURL().then(remoteUrl => {
-          //remoteFile = { fileName: file.name, remoteUrl: url };
-          _this.convertThumbnailAndSaveInStorage(remoteUrl, file);
+    const { files } = this.state;
+    files.forEach(mainImgFile => {
+      const storageRef = fire.storage().ref(`gallery/${key}`);
+      const mainImage = storageRef.child(mainImgFile.name);
+      mainImage.put(mainImgFile).then(snapshot =>
+        mainImage.getDownloadURL().then(mainImgRemoteUrl => {
+          const success_cb = thumbnailFile => {
+            //
+            const thumbnailFileRef = fire
+              .storage()
+              .ref(`gallery/${key}`)
+              .child(thumbnailFile.name);
+            thumbnailFileRef.put(thumbnailFile).then(snapshot =>
+              thumbnailFileRef.getDownloadURL().then(thumbnailUrl => {
+                _this.savePhoto(key, {
+                  thumbnail: thumbnailUrl,
+                  main: mainImgRemoteUrl
+                });
+              })
+            );
+          };
+          convertThumbnail(mainImgFile, success_cb, this.errorCallback);
         })
       );
     });
@@ -214,7 +192,22 @@ class GalleryUpload extends React.Component {
         isSubmitting: true
       };
     });
-    this.saveImageInStorage();
+
+    const key = fire
+      .database()
+      .ref()
+      .child(`gallery/metadata`)
+      .push().key;
+
+    const saveAlbumMetadata = thumbnailRemoteUrl => {
+      const cb = () => {
+        this.storeAllImage(key);
+      };
+      this.saveAlbumMetadata(key, thumbnailRemoteUrl, cb);
+    };
+
+    this.storeDefaultImage(key, saveAlbumMetadata);
+
     // sendPushNotificationToAll("New album added");
 
     // sendPushNotification(
@@ -224,6 +217,42 @@ class GalleryUpload extends React.Component {
     // ).catch(function(error) {
     //   console.error(`_handleSubmit-error=${JSON.stringify(error)}`);
     // });
+  }
+
+  storeDefaultImage(key, saveMetadata) {
+    const { files } = this.state;
+    const mainImgFile = files[0];
+    const success_cb = thumbnailImg => {
+      const storageRef = fire.storage().ref(`gallery/${key}`);
+      const mainImage = storageRef.child(thumbnailImg.name);
+      mainImage.put(thumbnailImg).then(snapshot =>
+        mainImage.getDownloadURL().then(thumbnailRemoteUrl => {
+          saveMetadata(thumbnailRemoteUrl);
+        })
+      );
+    };
+    convertThumbnail(mainImgFile, success_cb, this.errorCallback);
+  }
+
+  saveAlbumMetadata(key, thumbnailRemoteUrl, storeAllImage) {
+    fire
+      .database()
+      .ref()
+      .child(`gallery/metadata/${key}`)
+      .set(
+        {
+          title: this.state.albumTitle,
+          thumbnail: thumbnailRemoteUrl,
+          count: 0
+        },
+        error => {
+          if (error) {
+            this.errorCallback();
+          } else {
+            storeAllImage();
+          }
+        }
+      );
   }
 
   _handleImageChange(e) {

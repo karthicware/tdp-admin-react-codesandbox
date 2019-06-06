@@ -4,6 +4,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "material-ui-pickers";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Button from "../../components/CustomButtons/Button.jsx";
 import { makeStyles } from "@material-ui/styles";
 import Fab from "@material-ui/core/Fab";
 import SearchIcon from "@material-ui/icons/Search";
@@ -12,6 +13,10 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles({
   grid: {
     width: "60%"
+  },
+  paper: {
+    padding: 20,
+    marginBottom: 20
   },
   searchTitle: {
     padding: 10
@@ -37,15 +42,10 @@ const GalleryFilter = () => {
       <Typography variant="h6" gutterBottom className={classes.searchTitle}>
         Search
       </Typography>
-      <Paper>
-        <Grid item sm={12}>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <Grid
-              container
-              className={classes.grid}
-              justify="space-around"
-              alignItems="center"
-            >
+      <Paper className={classes.paper}>
+        <Grid container spacing={16} direction="row" alignItems="center">
+          <Grid item>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
                 margin="normal"
                 label="From Date"
@@ -53,6 +53,10 @@ const GalleryFilter = () => {
                 format="dd/MM/yyyy"
                 onChange={handleFromDateChange}
               />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <DatePicker
                 margin="normal"
                 label="To Date"
@@ -60,16 +64,14 @@ const GalleryFilter = () => {
                 format="dd/MM/yyyy"
                 onChange={handleToDateChange}
               />
-              <Fab
-                size="medium"
-                color="primary"
-                aria-label="Add"
-                className={classes.margin}
-              >
-                <SearchIcon />
-              </Fab>
-            </Grid>
-          </MuiPickersUtilsProvider>
+            </MuiPickersUtilsProvider>
+          </Grid>
+
+          <Grid item>
+            <Button color="primary" round justIcon>
+              <SearchIcon />
+            </Button>
+          </Grid>
         </Grid>
       </Paper>
     </>
