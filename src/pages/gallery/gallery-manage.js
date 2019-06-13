@@ -15,7 +15,7 @@ import "react-block-ui/style.css";
 
 import fire from "../../fire";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
-import NewsFilter from "./gallery-filter";
+import GalleryFilter from "./gallery-filter";
 
 const styles = theme => ({
   buttonRow: {
@@ -66,16 +66,11 @@ class GalleryManage extends React.Component {
     ref.once("value", function(snapshot) {
       if (snapshot.val()) {
         let albumList = [];
-        //console.log(`snapshot.val()=${JSON.stringif1y(snapshot.val())}`);
         Object.entries(snapshot.val()).forEach(entry => {
-          const [title, value] = entry;
-          Object.entries(value).forEach(entry => {
-            const [key, value] = entry;
-            console.log(`key=${key}, v=${JSON.stringify(value)}`);
-            albumList.push({ key, title, thumbnail: value.thumbnail });
-          });
+          const [key, obj] = entry;
+          albumList.push({ key, ...obj });
         });
-        console.log(`albumList=${JSON.stringify(albumList)}`);
+        //console.log(`albumList=${JSON.stringify(albumList)}`);
         _this.setState({ albumList });
       }
     });
@@ -135,11 +130,14 @@ class GalleryManage extends React.Component {
       <BlockUi tag="div" blocking={isSubmitting}>
         <ErrorToast />
         <SuccessToast />
-        <NewsFilter />
+        <GalleryFilter />
         <Grid container sm={12} className={classes.albumContainer}>
           {albumList.map(data => (
-            <Card className={classes.card}>
-              <CardHeader title={data.title} subheader="September 14, 2016" />
+            <Card key={data.key} className={classes.card}>
+              <CardHeader
+                title={data.title}
+                subheader={new Date(data.timestamp * 1000).toGMTString()}
+              />
               <CardActionArea>
                 <CardMedia
                   className={classes.media}

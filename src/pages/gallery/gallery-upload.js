@@ -22,10 +22,10 @@ import "react-block-ui/style.css";
 //import MyButton from "../../components/CustomButtons/Button.jsx";
 import fire from "../../fire";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
-import {
-  sendPushNotificationToAll,
-  sendPushNotification
-} from "../../services/notification-service";
+// import {
+//   sendPushNotificationToAll,
+//   sendPushNotification
+// } from "../../services/notification-service";
 import { convertThumbnail } from "../../utils/image-util";
 
 const styles = theme => ({
@@ -126,6 +126,7 @@ class GalleryUpload extends React.Component {
     fire
       .database()
       .ref(`/gallery/album/${key}`)
+      .push()
       .set(obj, function(error) {
         if (error) {
           alert(error);
@@ -202,6 +203,14 @@ class GalleryUpload extends React.Component {
     const saveAlbumMetadata = thumbnailRemoteUrl => {
       const cb = () => {
         this.storeAllImage(key);
+        console.log(`finished`);
+        this.setState((state, props) => {
+          return {
+            message: "Album created successfully!",
+            isSuccess: true,
+            isSubmitting: false
+          };
+        });
       };
       this.saveAlbumMetadata(key, thumbnailRemoteUrl, cb);
     };
@@ -243,7 +252,8 @@ class GalleryUpload extends React.Component {
         {
           title: this.state.albumTitle,
           thumbnail: thumbnailRemoteUrl,
-          count: 0
+          count: 0,
+          timestamp: new Date().getTime()
         },
         error => {
           if (error) {
