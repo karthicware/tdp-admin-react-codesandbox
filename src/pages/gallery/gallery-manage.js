@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Button from "../../components/CustomButtons/Button.jsx";
 import Snackbar from "@material-ui/core/Snackbar";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
@@ -10,12 +10,25 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import { withStyles } from "@material-ui/core/styles";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Slide from "@material-ui/core/Slide";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Close from "@material-ui/icons/Close";
 import BlockUi from "react-block-ui";
 import "react-block-ui/style.css";
+import Moment from "react-moment";
 
 import fire from "../../fire";
 import MySnackbarContentWrapper from "../../components/MySnackbarContentWrapper";
 import GalleryFilter from "./gallery-filter";
+import modalStyle from "../../assets/jss/material-kit-pro-react/modalStyle.jsx";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
 
 const styles = theme => ({
   buttonRow: {
@@ -32,7 +45,8 @@ const styles = theme => ({
     marginTop: 20
   },
   card: {
-    maxWidth: 200,
+    maxWidth: 300,
+    minWidth: 200,
     marginBottom: 10,
     marginRight: 10
   },
@@ -41,9 +55,57 @@ const styles = theme => ({
     paddingTop: "56.25%" // 16:9
   },
   actions: {
-    display: "flex"
+    display: "flex",
+    justifyContent: "space-between"
   }
 });
+
+function DeleteConfirmation() {
+  return (
+    <Dialog
+      classes={{
+        root: classes.modalRoot,
+        paper: classes.modal
+      }}
+      open={this.state.liveDemo}
+      TransitionComponent={Transition}
+      keepMounted
+      onClose={() => this.handleClose("liveDemo")}
+      aria-labelledby="classic-modal-slide-title"
+      aria-describedby="classic-modal-slide-description"
+    >
+      <DialogTitle
+        id="classic-modal-slide-title"
+        disableTypography
+        className={classes.modalHeader}
+      >
+        <Button
+          simple
+          className={classes.modalCloseButton}
+          key="close"
+          aria-label="Close"
+          onClick={() => this.handleClose("liveDemo")}
+        >
+          {" "}
+          <Close className={classes.modalClose} />
+        </Button>
+        <h4 className={classes.modalTitle}>Modal title</h4>
+      </DialogTitle>
+      <DialogContent
+        id="classic-modal-slide-description"
+        className={classes.modalBody}
+      >
+        <p>Woohoo, you're reading this text in a modal!</p>
+      </DialogContent>
+      <DialogActions className={classes.modalFooter}>
+        <Button onClick={() => this.handleClose("liveDemo")} color="secondary">
+          Close
+        </Button>
+        <Button color="primary">Save changes</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
 
 class GalleryManage extends React.Component {
   constructor(props) {
@@ -136,21 +198,23 @@ class GalleryManage extends React.Component {
             <Card key={data.key} className={classes.card}>
               <CardHeader
                 title={data.title}
-                subheader={new Date(data.timestamp * 1000).toGMTString()}
+                subheader={
+                  <Moment format="DD/MM/YYYY">{data.timestamp}</Moment>
+                }
               />
               <CardActionArea>
                 <CardMedia
                   className={classes.media}
                   image={data.thumbnail}
-                  title="Paella dish"
+                  title={data.title}
                 />
               </CardActionArea>
               <CardActions className={classes.actions} disableActionSpacing>
-                <Button size="small" color="primary">
-                  Share
+                <Button color="primary" size="sm">
+                  View
                 </Button>
-                <Button size="small" color="primary">
-                  Learn More
+                <Button justIcon round color="danger" size="sm">
+                  <DeleteIcon style={{ color: "#FFFFFF" }} />
                 </Button>
               </CardActions>
             </Card>
