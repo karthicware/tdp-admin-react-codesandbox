@@ -2,10 +2,13 @@ import React from "react";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
-import People from "@material-ui/icons/People";
+import Favorite from "@material-ui/icons/Favorite";
+import Face from "@material-ui/icons/Face";
 // core components
 import Header from "components/Header/Header.jsx";
 import HeaderLinks from "components/Header/HeaderLinks.jsx";
@@ -16,40 +19,26 @@ import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 
-import loginPageStyle from "assets/jss/material-kit-react/views/loginPage.jsx";
+import loginPageStyle from "assets/jss/material-kit-pro-react/views/loginPageStyle.jsx";
 
 import image from "assets/img/bg7.jpg";
 
 class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-    // we use this to make the card to appear after the page has been rendered
-    this.state = {
-      cardAnimaton: "cardHidden"
-    };
-  }
   componentDidMount() {
-    // we add a hidden class to the card and after 700 ms we delete it and the transition appears
-    setTimeout(
-      function() {
-        this.setState({ cardAnimaton: "" });
-      }.bind(this),
-      700
-    );
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0;
   }
   render() {
-    const { classes, ...rest } = this.props;
+    const { classes } = this.props;
     return (
       <div>
         <Header
           absolute
           color="transparent"
-          brand="Material Kit React"
-          rightLinks={<HeaderLinks />}
-          {...rest}
+          brand="Material Kit PRO React"
+          links={<HeaderLinks dropdownHoverColor="info" />}
         />
         <div
           className={classes.pageHeader}
@@ -62,101 +51,154 @@ class LoginPage extends React.Component {
           <div className={classes.container}>
             <GridContainer justify="center">
               <GridItem xs={12} sm={12} md={4}>
-                <Card className={classes[this.state.cardAnimaton]}>
+                <Card>
                   <form className={classes.form}>
-                    <CardHeader color="primary" className={classes.cardHeader}>
-                      <h4>Login</h4>
+                    <CardHeader
+                      color="primary"
+                      signup
+                      className={classes.cardHeader}
+                    >
+                      <h4 className={classes.cardTitle}>Login</h4>
                       <div className={classes.socialLine}>
                         <Button
                           justIcon
-                          href="#pablo"
-                          target="_blank"
                           color="transparent"
+                          className={classes.iconButtons}
                           onClick={e => e.preventDefault()}
                         >
-                          <i className={"fab fa-twitter"} />
+                          <i className="fab fa-twitter" />
                         </Button>
                         <Button
                           justIcon
-                          href="#pablo"
-                          target="_blank"
                           color="transparent"
+                          className={classes.iconButtons}
                           onClick={e => e.preventDefault()}
                         >
-                          <i className={"fab fa-facebook"} />
+                          <i className="fab fa-facebook" />
                         </Button>
                         <Button
                           justIcon
-                          href="#pablo"
-                          target="_blank"
                           color="transparent"
+                          className={classes.iconButtons}
                           onClick={e => e.preventDefault()}
                         >
-                          <i className={"fab fa-google-plus-g"} />
+                          <i className="fab fa-google-plus-g" />
                         </Button>
                       </div>
                     </CardHeader>
-                    <p className={classes.divider}>Or Be Classical</p>
-                    <CardBody>
+                    <p
+                      className={`${classes.description} ${classes.textCenter}`}
+                    >
+                      Or Be Classical
+                    </p>
+                    <CardBody signup>
                       <CustomInput
-                        labelText="First Name..."
                         id="first"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
+                          placeholder: "First Name...",
                           type: "text",
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <People className={classes.inputIconsColor} />
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <Face className={classes.inputIconsColor} />
                             </InputAdornment>
                           )
                         }}
                       />
                       <CustomInput
-                        labelText="Email..."
                         id="email"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
+                          placeholder: "Email...",
                           type: "email",
-                          endAdornment: (
-                            <InputAdornment position="end">
+                          startAdornment: (
+                            <InputAdornment position="start">
                               <Email className={classes.inputIconsColor} />
                             </InputAdornment>
                           )
                         }}
                       />
                       <CustomInput
-                        labelText="Password"
                         id="pass"
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
+                          placeholder: "Password",
                           type: "password",
-                          endAdornment: (
-                            <InputAdornment position="end">
+                          startAdornment: (
+                            <InputAdornment position="start">
                               <Icon className={classes.inputIconsColor}>
-                                lock_outline
+                                lock_utline
                               </Icon>
                             </InputAdornment>
                           )
                         }}
                       />
                     </CardBody>
-                    <CardFooter className={classes.cardFooter}>
+                    <div className={classes.textCenter}>
                       <Button simple color="primary" size="lg">
                         Get started
                       </Button>
-                    </CardFooter>
+                    </div>
                   </form>
                 </Card>
               </GridItem>
             </GridContainer>
           </div>
-          <Footer whiteFont />
+          <Footer
+            className={classes.footer}
+            content={
+              <div>
+                <div className={classes.left}>
+                  <List className={classes.list}>
+                    <ListItem className={classes.inlineBlock}>
+                      <a
+                        href="https://www.creative-tim.com/"
+                        className={classes.block}
+                      >
+                        Creative Tim
+                      </a>
+                    </ListItem>
+                    <ListItem className={classes.inlineBlock}>
+                      <a
+                        href="https://www.creative-tim.com/presentation"
+                        className={classes.block}
+                      >
+                        About us
+                      </a>
+                    </ListItem>
+                    <ListItem className={classes.inlineBlock}>
+                      <a
+                        href="//blog.creative-tim.com/"
+                        className={classes.block}
+                      >
+                        Blog
+                      </a>
+                    </ListItem>
+                    <ListItem className={classes.inlineBlock}>
+                      <a
+                        href="https://www.creative-tim.com/license"
+                        className={classes.block}
+                      >
+                        Licenses
+                      </a>
+                    </ListItem>
+                  </List>
+                </div>
+                <div className={classes.right}>
+                  &copy; {1900 + new Date().getYear()} , made with{" "}
+                  <Favorite className={classes.icon} /> by{" "}
+                  <a href="https://www.creative-tim.com">Creative Tim</a> for a
+                  better web
+                </div>
+              </div>
+            }
+          />
         </div>
       </div>
     );
